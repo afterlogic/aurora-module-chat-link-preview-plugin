@@ -1,0 +1,1 @@
+# aurora-module-chat-link-preview-plugin
