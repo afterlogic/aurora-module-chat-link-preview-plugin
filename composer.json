@@ -1,0 +1,12 @@
+{
+	"name": "afterlogic/aurora-module-chat-link-preview-plugin",
+	"type": "aurora-module",
+	"require":{
+		"php":">=5.4.0",
+		"afterlogic/aurora-framework": "~0.6",
+        "afterlogic/aurora-module-chat": "~0.6"
+	},
+	"extra": {
+		"installer-name": "ChatLinkPreviewPlugin"
+	}
+}
