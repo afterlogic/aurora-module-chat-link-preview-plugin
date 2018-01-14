@@ -42,7 +42,6 @@ class Module extends \Aurora\System\Module\AbstractModule
 				{
 					$sPattern = '/http(s)?:\/\/[^\s]*/';
 					$aMatches = [];
-					$aPreviews = [];
 
 					preg_match($sPattern, $aPost['text'], $aMatches);
 					array_unique($aMatches);
@@ -50,13 +49,17 @@ class Module extends \Aurora\System\Module\AbstractModule
 					{
 						if (filter_var($sURL, FILTER_VALIDATE_URL))
 						{
-							$sReplacement = $this->oApiPreviewManager->GetPreview($sURL);
-							$aPost['text'] = str_replace($sURL, $sReplacement, $aPost['text']);
+							$aPost['text'] = $this->ReplaseLink($sURL, $aPost['text']);
 						}
 					}
-					
 				}
 			}
 		}
+	}
+
+	public function ReplaseLink($Link, $Text)
+	{
+		$sReplacement = $this->oApiPreviewManager->GetPreview($Link);
+		return $Text . $sReplacement;
 	}
 }

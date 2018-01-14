@@ -32,8 +32,79 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 		$sResult = '';
 		if (!empty($sURL))
 		{
-			$sResult = "```" . $sURL . "```";
+			$sHtml = @file_get_contents($sURL);
+			if ($sHtml)
+			{
+				$sImage = '';
+				$sTitle = '';
+				$sDescription = '';
+
+				$aMeta = $this->GetMetaTags($sHtml);
+				foreach ($aMeta as $key => $value)
+				{
+					switch ($key)
+					{
+						case 'og:image':
+							$sImage = $value;
+							break;
+						case 'og:title':
+							$sTitle = $value;
+							break;
+						case 'og:description':
+							$sDescription = $value;
+							break;
+					}
+				}
+
+				if ($sImage && $sTitle && $sDescription)
+				{
+					$sResult = '<div>
+						<a href="' . $sURL . '">
+						<div style="color: #fff;
+							background-image: url(' . $sImage . ');
+							background-size: cover;
+							height: 150px;
+							width:300px;
+							border-radius: 7px; 
+							display: table-cell;
+							vertical-align: bottom">
+							<div style="background: rgba(86, 86, 86, 0.5); padding: 10px; border-radius: 7px;">
+								<h3>' . $sTitle . '</h3>
+								<span>' . parse_url($sURL, PHP_URL_HOST) . '</span>
+							</div>
+						</div>
+					</a></div>';
+				}
+			}
 		}
 		return $sResult;
+	}
+	
+	public function GetMetaTags($sStr)
+	{
+		$aOut = [];
+		$sPattern = '
+		~<\s*meta\s
+
+		# using lookahead to capture type to $1
+		  (?=[^>]*?
+		  \b(?:name|property|http-equiv)\s*=\s*
+		  (?|"\s*([^"]*?)\s*"|\'\s*([^\']*?)\s*\'|
+		  ([^"\'>]*?)(?=\s*/?\s*>|\s\w+\s*=))
+		)
+
+		# capture content to $2
+		[^>]*?\bcontent\s*=\s*
+		  (?|"\s*([^"]*?)\s*"|\'\s*([^\']*?)\s*\'|
+		  ([^"\'>]*?)(?=\s*/?\s*>|\s\w+\s*=))
+		[^>]*>
+
+		~ix';
+
+		if(preg_match_all($sPattern, $sStr, $aOut))
+		{
+			return array_combine($aOut[1], $aOut[2]);
+		}
+		return array();
 	}
 }
