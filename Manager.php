@@ -32,7 +32,13 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 		$sResult = '';
 		if (!empty($sURL))
 		{
-			$sHtml = @file_get_contents($sURL);
+			$aContextOptions=array(
+				"ssl"=>array(
+					"verify_peer"=>false,
+					"verify_peer_name"=>false,
+				),
+			);
+			$sHtml = @file_get_contents($sURL, false, stream_context_create($aContextOptions));
 			if ($sHtml)
 			{
 				$sImage = '';
