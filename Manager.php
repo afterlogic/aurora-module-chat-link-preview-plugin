@@ -38,7 +38,7 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 					"verify_peer_name"=>false,
 				),
 			);
-			$sHtml = @file_get_contents($sURL, false, stream_context_create($aContextOptions));
+			@$sHtml = \file_get_contents($sURL, false, stream_context_create($aContextOptions));
 			if ($sHtml)
 			{
 				$sImage = '';

@@ -61,6 +61,8 @@ class Module extends \Aurora\System\Module\AbstractModule
 	public function ReplaseLink($Link, $Text)
 	{
 		$sReplacement = $this->oApiPreviewManager->GetPreview($Link);
+		$sTagLink = '<a href="' . $Link . '" target=_blank>' . $Link . '</a>';
+		$Text = \str_replace($Link, $sTagLink, $Text);
 		return $Text . $sReplacement;
 	}
 }
