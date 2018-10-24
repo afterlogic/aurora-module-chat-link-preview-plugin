@@ -51,7 +51,7 @@ class Module extends \Aurora\System\Module\AbstractModule
 						if (filter_var($sURL, FILTER_VALIDATE_URL))
 						{
 							$aPost['text'] = $this->ReplaseLink($sURL, htmlspecialchars($aPost['text']));
-							$aPost['is_html'] = true;
+							$aPost['isHtml'] = true;
 						}
 					}
 				}
